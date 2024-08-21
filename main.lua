@@ -1,23 +1,34 @@
 function love.load()
-    x, y, r = 100, 100, 10
+    width, height = love.graphics.getDimensions()
+    xBola, yBola, r = 100, 100, 10
     xJoy, yJoy = 0, 0
     
-    xFix = 700.0
-    yFix = 250.0
-    xMov = 700.0
-    yMov = 250.0
+    xFix = width - 100
+    yFix = height - 100
+    xMov = width - 100
+    yMov = height - 100
     raioDentro = 20.0
     raioFora = 60.0
     joyAxis = {}
-    vetorDirecao = {x, y, x + 2, y + 2}
+    vetorDirecao = {xBola, yBola, xBola + 2, yBola + 2}
     joyAxis = {xJoy, yJoy}
 end
 
 function love.update(dt)
-	
-	x = x + joyAxis[1] * 200 * dt
-	y = y + joyAxis[2] * 200 * dt
     
+    if love.keyboard.isDown("w") then
+        yBola = yBola - 200 * dt
+    end
+    if love.keyboard.isDown("s") then
+        yBola = yBola + 200 * dt
+    end
+    if love.keyboard.isDown("d") then
+        xBola = xBola + 200 * dt
+    end
+    if love.keyboard.isDown("a") then
+        xBola = xBola - 200 * dt
+    end
+
     -- Joystick
     funcionaJoystick()
 end
@@ -26,8 +37,8 @@ function love.draw()
 	love.graphics.line(vetorDirecao)
 	
 	love.graphics.setColor(0, 1, 0)
-    love.graphics.circle("fill", x, y, r)
-    love.graphics.circle("line", x, y, r * 3)
+    love.graphics.circle("fill", xBola, yBola, r)
+    love.graphics.circle("line", xBola, yBola, r * 3)
     
     -- debug
     love.graphics.print(string.format("x:%.1f",joyAxis[1]), 100, 100)
@@ -64,8 +75,4 @@ function funcionaJoystick()
     	joyAxis[1] = 0
     	joyAxis[2] = 0
     end
-end
-
-function distancia(A, B)
-	return ((B.x - A.x)^2 + (B.y + A.y)^2) ^ 0.5
 end
